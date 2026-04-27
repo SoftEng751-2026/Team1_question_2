@@ -1,6 +1,8 @@
 Run Java tests:
 
 ```bash
+ javac Java_implementation/*.java
+
  cd./Java_implementation
  
  java -cp .. Java_implementation.Sequential_test "../tests_configs.csv"
