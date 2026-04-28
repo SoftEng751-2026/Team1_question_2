@@ -9,7 +9,10 @@ import java.util.Random;
 
 
 
+
+
 class Sequential_test {
+
 
     // Function to find the next generation
     static void findNextGen(int[][] mat) {
