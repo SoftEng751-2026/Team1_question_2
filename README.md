@@ -1,6 +1,6 @@
 ## Game of Life Stencil Analysis
 
-Project compares two parallelised versions of the game of life problem in C++ and Java. Multiple tests of varying grid sizes,iterations, seeds, and threads are ran according to how many cores and logical processors I have. To change these according to yours manually go to test_configs.csv to change thread count and tests. After testing script is ran a bar chart is created to see the peformance differences in benchmark_results/benchmark_plots.
+Project compares two parallelised versions of the game of life problem in C++ and Java. Multiple tests of varying grid sizes,iterations, seeds, and threads are ran according to how many cores and logical processors I have. To change these according to yours manually go to test_configs.csv to change thread count and tests. After testing script is ran, a bar chart is created to see the peformance differences in benchmark_results/benchmark_plots.
 ***
 For everything to work you must have JDK/Java 11 and GCC/G++ and python 3.10.
 Easier to use WSL or a Linux environment to run the tests. 
@@ -23,10 +23,10 @@ python create_plot.py
 ```bash
 docker build -t stencil_benchmark .
 
-# If your on windows
+# If you're on windows
 docker run --rm -v "%cd%":/app stencil_benchmark
 
-# If your on WSL or Mac
+# If you're on WSL or Mac
 docker run --rm -v $(pwd):/app stencil_benchmark
 ```
 
