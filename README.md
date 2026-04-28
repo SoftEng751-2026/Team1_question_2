@@ -1,39 +1,32 @@
+## Game of Life Stencil Analysis
 
-**TODO:** Add more tests to work out the average between C++ vs Java and run a program to plot the performance difference between the two. After run add docker files so teamates / assessors can run code without version clashes.
-
+Project compares two parallelised versions of the game of life problem in C++ and Java. Multiple tests of varying grid sizes,iterations, seeds, and threads are ran according to how many cores and logical processors I have. To change these according to yours manually go to test_configs.csv to change thread count and tests. After testing script is ran a bar chart is created to see the peformance differences in benchmark_results/benchmark_plots.
 ***
-For everything to work you must have JDK/Java 11 and GCC/G++.
-Easier to use WSL or a Linux environment to run the tests.
+For everything to work you must have JDK/Java 11 and GCC/G++ and python 3.10.
+Easier to use WSL or a Linux environment to run the tests. 
+Or use the dockerfile given and then run the image with volume.
 ***
 
 
-**Run the Java fork vs C++ fork script (actual assessment scope):**
+**Run the Java fork vs C++ fork script**
 ```bash
 # If using WSL make sure you have dos2unix
+
 sudo apt update && sudo apt install -y dos2unix
 dos2unix run_tests.sh
-
-./run_tests.sh
+/run_tests.sh
+python create_plot.py
 ```
 
 ***
-Run ALL tests (basic checks):
+**Run with docker (for assessors and team):**
 ```bash
-# Java Implementations
-javac Java_implementation/*.java
+docker build -t stencil_benchmark .
 
-java -cp . Java_implementation.Sequential_test "tests_configs.csv"
+# If your on windows
+docker run --rm -v "%cd%":/app stencil_benchmark
 
-java -cp . Java_implementation.Game_of_life_fork "tests_configs.csv"
-
-# C++ Implementations
-g++ Cpp_implementation/Cpp_sequential.cpp -o Cpp_implementation/Cpp_sequential.exe
-
-./Cpp_implementation/Cpp_sequential.exe tests_configs.csv
-
-g++ -O3 -fopenmp Cpp_implementation/Cpp_fork.cpp -o Cpp_implementation/Cpp_fork.exe
-
-./Cpp_implementation/Cpp_fork.exe tests_configs.csv
-
+# If your on WSL or Mac
+docker run --rm -v $(pwd):/app stencil_benchmark
 ```
 

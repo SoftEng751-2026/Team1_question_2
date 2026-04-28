@@ -2,4 +2,6 @@ PLAN.md
 *.class
 .vscode
 *.exe
-
+Keep/
+old.java
+oldc.cpp
