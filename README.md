@@ -1,8 +1,23 @@
+
+**TODO:** Add more tests to work out the average between C++ vs Java and run a program to plot the performance difference between the two. After run add docker files so teamates / assessors can run code without version clashes.
+
+***
 For everything to work you must have JDK/Java 11 and GCC/G++.
 Easier to use WSL or a Linux environment to run the tests.
+***
 
-Run ALL tests(just for sanity check):
 
+**Run the Java fork vs C++ fork script (actual assessment scope):**
+```bash
+# If using WSL make sure you have dos2unix
+sudo apt update && sudo apt install -y dos2unix
+dos2unix run_tests.sh
+
+./run_tests.sh
+```
+
+***
+Run ALL tests (basic checks):
 ```bash
 # Java Implementations
 javac Java_implementation/*.java
@@ -22,11 +37,3 @@ g++ -O3 -fopenmp Cpp_implementation/Cpp_fork.cpp -o Cpp_implementation/Cpp_fork.
 
 ```
 
-Run the Java fork vs C++ fork script(actual assessment scope):
-```bash
-# If using WSL make sure you have dos2unix
-sudo apt update && sudo apt install -y dos2unix
-dos2unix run_tests.sh
-
-./run_tests.sh
-```
