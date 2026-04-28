@@ -1,7 +1,7 @@
 For everything to work you must have JDK/Java 11 and GCC/G++.
 Easier to use WSL or a Linux environment to run the tests.
 
-Run ALL tests:
+Run ALL tests(just for sanity check):
 
 ```bash
 # Java Implementations
@@ -22,7 +22,7 @@ g++ -O3 -fopenmp Cpp_implementation/Cpp_fork.cpp -o Cpp_implementation/Cpp_fork.
 
 ```
 
-Run the Java fork vs C++ fork script:
+Run the Java fork vs C++ fork script(actual assessment scope):
 ```bash
 # If using WSL make sure you have dos2unix
 sudo apt update && sudo apt install -y dos2unix
