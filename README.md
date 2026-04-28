@@ -1,4 +1,7 @@
-Run Java tests:
+For everything to work you must have JDK/Java 11 and GCC/G++.
+Easier to use WSL or a Linux environment to run the tests.
+
+Run ALL tests:
 
 ```bash
 # Java Implementations
@@ -17,4 +20,13 @@ g++ -O3 -fopenmp Cpp_implementation/Cpp_fork.cpp -o Cpp_implementation/Cpp_fork.
 
 ./Cpp_implementation/Cpp_fork.exe tests_configs.csv
 
+```
+
+Run the Java fork vs C++ fork script:
+```bash
+# If using WSL make sure you have dos2unix
+sudo apt update && sudo apt install -y dos2unix
+dos2unix run_tests.sh
+
+./run_tests.sh
 ```
