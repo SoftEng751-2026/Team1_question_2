@@ -14,7 +14,7 @@ Or use the dockerfile given and then run the image with volume.
 
 sudo apt update && sudo apt install -y dos2unix
 dos2unix run_tests.sh
-/run_tests.sh
+./run_tests.sh
 python create_plot.py
 ```
 
