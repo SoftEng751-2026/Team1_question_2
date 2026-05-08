@@ -21,7 +21,7 @@ echo -e "\n=== Running: C++ Heat Diffusion Benchmark ==="
 ./Cpp_implementation/Heat_diffusion_benchmark.exe tests_configs.csv | tee /dev/stderr | tail -n +2 >> "$HEAT_OUT"
 
 echo -e "\n=== Generating Heat Diffusion Performance Plots ==="
-python create_plot_heat_diffusion.py
+python3 create_plot_heat_diffusion.py
 
 rm -f Java_implementation/*.class
 rm -f Cpp_implementation/*.exe
