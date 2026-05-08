@@ -95,14 +95,14 @@ int main(int argc, char* argv[]) {
         vector<vector<int>> currentGrid = generateGrid(tc.rows, tc.cols, tc.seed);
         vector<vector<int>> nextGrid(tc.rows, vector<int>(tc.cols));
 
-        auto start = chrono::high_resolution_clock::now();
+        auto start = chrono::steady_clock::now();
 
         for (int i = 0; i < tc.iterations; i++) {
             findNextGen(currentGrid, nextGrid);
             currentGrid.swap(nextGrid);
         }
 
-        auto end = chrono::high_resolution_clock::now();
+        auto end = chrono::steady_clock::now();
         chrono::duration<double, std::milli> duration = end - start;
 
         cout << "cpp_sequential," << tc.rows << "," << tc.cols << "," 

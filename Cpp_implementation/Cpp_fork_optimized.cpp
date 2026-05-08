@@ -143,14 +143,14 @@ int main(int argc, char* argv[]) {
         findNextGen(currentGrid, nextGrid, tc.rows, tc.cols, stride);
         swap(currentGrid, nextGrid);
 
-        auto start = chrono::high_resolution_clock::now();
+        auto start = chrono::steady_clock::now();
 
         for (int i = 0; i < tc.iterations; i++) {
             findNextGen(currentGrid, nextGrid, tc.rows, tc.cols, stride);
             swap(currentGrid, nextGrid);
         }
 
-        auto end = chrono::high_resolution_clock::now();
+        auto end = chrono::steady_clock::now();
         chrono::duration<double, milli> duration = end - start;
 
         cout << "cpp_optimized," << tc.rows << "," << tc.cols << ","
