@@ -67,10 +67,15 @@ public:
     }
 };
 
-int main() {
+int main(int argc, char* argv[]) {
+    // Default values if no arguments are provided
     int size = 10;
     int steps = 5;
-    double alpha = 0.2; // Thermal diffusivity constant
+    double alpha = 0.2;
+
+    // This part reads the numbers you type in the terminal
+    if (argc >= 2) size = std::stoi(argv[1]);
+    if (argc >= 3) steps = std::stoi(argv[2]);
 
     HeatDiffusion solver(size, size, alpha);
     solver.initialize();
@@ -81,8 +86,14 @@ int main() {
         currentIsGrid1 = !currentIsGrid1;
     }
 
-    std::cout << "Final state after " << steps << " steps:" << std::endl;
-    solver.printGrid(currentIsGrid1);
+    // Only print the grid if it's small (to avoid flooding your terminal)
+    if (size <= 20) {
+        std::cout << "Final state after " << steps << " steps:" << std::endl;
+        solver.printGrid(currentIsGrid1);
+    } else {
+        std::cout << "Simulation complete for " << size << "x" << size 
+                  << " grid after " << steps << " steps." << std::endl;
+    }
 
     return 0;
 }
