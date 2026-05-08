@@ -20,6 +20,9 @@ java -cp . Java_implementation.Game_of_life_fork_optimized "tests_configs.csv" |
 echo -e "\n=== Running: C++ Optimized (OpenMP + cache) ==="
 ./Cpp_implementation/Cpp_fork_optimized.exe tests_configs.csv | tee /dev/stderr | tail -n +2 >> "$OUT"
 
+echo -e "\n=== Generating Performance Plots ==="
+python create_plot.py
+
 rm -f Java_implementation/*.class
 rm -f Cpp_implementation/*.exe
 
