@@ -17,12 +17,12 @@ pivot_df = df.pivot_table(
 
 # Define a color map to distinguish between Language and Parallelism
 # Java: Blue tones, C++: Green tones
-# Parallel: Darker, Serial: Lighter
+# Parallel: Darker, Sequential: Lighter
 color_map = {
     'HeatDiffusion_Java_ForkJoin': '#1f77b4',  # Dark Blue
-    'HeatDiffusion_Java_Serial': '#aec7e8',    # Light Blue
+    'HeatDiffusion_Java_Sequential': '#aec7e8',    # Light Blue
     'HeatDiffusion_Cpp_OMP': '#2ca02c',        # Dark Green
-    'HeatDiffusion_Cpp_Serial': '#98df8a'      # Light Green
+    'HeatDiffusion_Cpp_Sequential': '#98df8a'      # Light Green
 }
 
 # Get colors in the order of the pivot table columns
@@ -30,7 +30,7 @@ colors = [color_map.get(col, '#333333') for col in pivot_df.columns]
 
 # Generate the bar chart
 plot = pivot_df.plot(kind='bar', figsize=(10, 6), rot=45, color=colors)
-plt.title('Heat Diffusion: Serial vs Parallel (Java & C++)')
+plt.title('Heat Diffusion: Sequential vs Parallel (Java & C++)')
 plt.ylabel('Execution Time (ms)')
 plt.xlabel('Configuration (Rows, Cols, Threads)')
 plt.grid(axis='y', linestyle='--', alpha=0.7)
