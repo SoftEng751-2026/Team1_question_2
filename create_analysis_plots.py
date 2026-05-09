@@ -31,12 +31,12 @@ def size_key(row):
 # ============================================================
 # Speedup Plots
 # ============================================================
-def plot_speedup(stats, serial_name, parallel_name, lang_label, title, filename):
+def plot_speedup(stats, sequential_name, parallel_name, lang_label, title, filename):
     sizes = stats[['rows', 'cols']].drop_duplicates().values
     fig, ax = plt.subplots(figsize=(8, 5))
     colors = ['#1f77b4', '#ff7f0e', '#2ca02c']
     for (rows, cols), color in zip(sizes, colors):
-        t_seq = stats[(stats['implementation'] == serial_name) &
+        t_seq = stats[(stats['implementation'] == sequential_name) &
                       (stats['rows'] == rows) & (stats['cols'] == cols) &
                       (stats['threads'] == 1)]
         if t_seq.empty:
@@ -76,20 +76,20 @@ plot_speedup(gol, 'java_sequential', 'java_optimized', 'Java (ForkJoin)',
              'Game of Life — Total Speedup', 'speedup_gol_java.png')
 
 # Heat Diffusion
-plot_speedup(heat, 'HeatDiffusion_Cpp_Serial', 'HeatDiffusion_Cpp_OMP', 'C++ (OpenMP)',
+plot_speedup(heat, 'HeatDiffusion_Cpp_Sequential', 'HeatDiffusion_Cpp_OMP', 'C++ (OpenMP)',
              'Heat Diffusion — Parallel Speedup', 'speedup_heat_cpp.png')
-plot_speedup(heat, 'HeatDiffusion_Java_Serial', 'HeatDiffusion_Java_ForkJoin', 'Java (ForkJoin)',
+plot_speedup(heat, 'HeatDiffusion_Java_Sequential', 'HeatDiffusion_Java_ForkJoin', 'Java (ForkJoin)',
              'Heat Diffusion — Parallel Speedup', 'speedup_heat_java.png')
 
 # ============================================================
 # Efficiency Plots
 # ============================================================
-def plot_efficiency(stats, serial_name, parallel_name, lang_label, title, filename):
+def plot_efficiency(stats, sequential_name, parallel_name, lang_label, title, filename):
     sizes = stats[['rows', 'cols']].drop_duplicates().values
     fig, ax = plt.subplots(figsize=(8, 5))
     colors = ['#1f77b4', '#ff7f0e', '#2ca02c']
     for (rows, cols), color in zip(sizes, colors):
-        t_seq = stats[(stats['implementation'] == serial_name) &
+        t_seq = stats[(stats['implementation'] == sequential_name) &
                       (stats['rows'] == rows) & (stats['cols'] == cols) &
                       (stats['threads'] == 1)]
         if t_seq.empty:
@@ -126,23 +126,23 @@ plot_efficiency(gol, 'cpp_sequential', 'cpp_optimized', 'C++ (OpenMP)',
                 'Game of Life — Efficiency', 'efficiency_gol_cpp.png')
 plot_efficiency(gol, 'java_sequential', 'java_optimized', 'Java (ForkJoin)',
                 'Game of Life — Efficiency', 'efficiency_gol_java.png')
-plot_efficiency(heat, 'HeatDiffusion_Cpp_Serial', 'HeatDiffusion_Cpp_OMP', 'C++ (OpenMP)',
+plot_efficiency(heat, 'HeatDiffusion_Cpp_Sequential', 'HeatDiffusion_Cpp_OMP', 'C++ (OpenMP)',
                 'Heat Diffusion — Efficiency', 'efficiency_heat_cpp.png')
-plot_efficiency(heat, 'HeatDiffusion_Java_Serial', 'HeatDiffusion_Java_ForkJoin', 'Java (ForkJoin)',
+plot_efficiency(heat, 'HeatDiffusion_Java_Sequential', 'HeatDiffusion_Java_ForkJoin', 'Java (ForkJoin)',
                 'Heat Diffusion — Efficiency', 'efficiency_heat_java.png')
 
 # ============================================================
 # C++ vs Java Ratio
 # ============================================================
-def plot_ratio(stats, serial_pair, parallel_pair, title, filename):
+def plot_ratio(stats, sequential_pair, parallel_pair, title, filename):
     """
-    serial_pair: (cpp_serial_name, java_serial_name)
+    sequential_pair: (cpp_sequential_name, java_sequential_name)
     parallel_pair: (cpp_par_name, java_par_name)
     For each config, ratio = Java_time / Cpp_time
     """
     fig, axes = plt.subplots(1, 2, figsize=(14, 5), sharey=True)
     for ax, (cpp_name, java_name, mode_label) in zip(axes, [
-            (serial_pair[0], serial_pair[1], 'Serial'),
+            (sequential_pair[0], sequential_pair[1], 'Sequential'),
             (parallel_pair[0], parallel_pair[1], 'Parallel')]):
         configs = stats[['rows', 'cols', 'threads']].drop_duplicates().sort_values(
             ['rows', 'cols', 'threads']).values
@@ -192,7 +192,7 @@ plot_ratio(gol,
            'Game of Life — C++ vs Java Performance Ratio',
            'ratio_gol.png')
 plot_ratio(heat,
-           ('HeatDiffusion_Cpp_Serial', 'HeatDiffusion_Java_Serial'),
+           ('HeatDiffusion_Cpp_Sequential', 'HeatDiffusion_Java_Sequential'),
            ('HeatDiffusion_Cpp_OMP', 'HeatDiffusion_Java_ForkJoin'),
            'Heat Diffusion — C++ vs Java Performance Ratio',
            'ratio_heat.png')
@@ -282,8 +282,8 @@ def plot_speedup_combined(stats, cpp_ser, cpp_par, java_ser, java_par, title, fi
 plot_speedup_combined(gol, 'cpp_sequential', 'cpp_optimized',
                       'java_sequential', 'java_optimized',
                       'Game of Life — Speedup by Problem Size', 'speedup_combined_gol.png')
-plot_speedup_combined(heat, 'HeatDiffusion_Cpp_Serial', 'HeatDiffusion_Cpp_OMP',
-                      'HeatDiffusion_Java_Serial', 'HeatDiffusion_Java_ForkJoin',
+plot_speedup_combined(heat, 'HeatDiffusion_Cpp_Sequential', 'HeatDiffusion_Cpp_OMP',
+                      'HeatDiffusion_Java_Sequential', 'HeatDiffusion_Java_ForkJoin',
                       'Heat Diffusion — Speedup by Problem Size', 'speedup_combined_heat.png')
 
 print(f"Analysis plots saved to {OUTPUT_DIR}/")

@@ -146,7 +146,7 @@ public class Heat_diffusion_benchmark {
     public static void main(String[] args) {
         if (args.length < 2) {
             System.err.println("Usage: java Heat_diffusion_benchmark <mode> <config_csv>");
-            System.err.println("  mode: serial | parallel");
+            System.err.println("  mode: sequential | parallel");
             return;
         }
 
@@ -166,7 +166,7 @@ public class Heat_diffusion_benchmark {
                     if ("parallel".equals(mode)) {
                         solveParallel(rows, cols, iters, seed, threads);
                     } else {
-                        solveSerial(rows, cols, iters, seed, threads);
+                        solveSequential(rows, cols, iters, seed, threads);
                     }
                 }
             }

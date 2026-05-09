@@ -129,7 +129,7 @@ void run_heat_diffusion_sequential(int rows, int cols, int iterations, int seed,
 int main(int argc, char* argv[]) {
     if (argc < 3) {
         std::cerr << "Usage: " << argv[0] << " <mode> <config_csv>" << std::endl;
-        std::cerr << "  mode: serial | parallel" << std::endl;
+        std::cerr << "  mode: sequential | parallel" << std::endl;
         return 1;
     }
 
@@ -156,7 +156,7 @@ int main(int argc, char* argv[]) {
             if (mode == "parallel") {
                 run_heat_diffusion_parallel(p[0], p[1], p[2], p[3], p[4]);
             } else {
-                run_heat_diffusion_serial(p[0], p[1], p[2], p[3], p[4]);
+                run_heat_diffusion_sequential(p[0], p[1], p[2], p[3], p[4]);
             }
         }
     }

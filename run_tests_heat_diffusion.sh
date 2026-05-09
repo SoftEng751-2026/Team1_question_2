@@ -15,10 +15,10 @@ javac Java_implementation/Heat_diffusion_benchmark.java
 echo -e "\n=== Compiling C++ Heat Diffusion (OpenMP) ==="
 g++ -O3 -fopenmp Cpp_implementation/Heat_diffusion_benchmark.cpp -o Cpp_implementation/Heat_diffusion_benchmark.exe
 
-echo -e "\n=== Running: Java Heat Diffusion Serial ==="
+echo -e "\n=== Running: Java Heat Diffusion Sequential ==="
 for run in $(seq 1 $NUM_RUNS); do
     echo "  Run $run..." >&2
-    java -cp . Java_implementation.Heat_diffusion_benchmark serial "tests_configs.csv" | tail -n +2 | sed "s/$/,$run/" >> "$HEAT_OUT"
+    java -cp . Java_implementation.Heat_diffusion_benchmark sequential "tests_configs.csv" | tail -n +2 | sed "s/$/,$run/" >> "$HEAT_OUT"
 done
 
 echo -e "\n=== Running: Java Heat Diffusion Parallel (ForkJoin) ==="
@@ -27,10 +27,10 @@ for run in $(seq 1 $NUM_RUNS); do
     java -cp . Java_implementation.Heat_diffusion_benchmark parallel "tests_configs.csv" | tail -n +2 | sed "s/$/,$run/" >> "$HEAT_OUT"
 done
 
-echo -e "\n=== Running: C++ Heat Diffusion Serial ==="
+echo -e "\n=== Running: C++ Heat Diffusion Sequential ==="
 for run in $(seq 1 $NUM_RUNS); do
     echo "  Run $run..." >&2
-    ./Cpp_implementation/Heat_diffusion_benchmark.exe serial tests_configs.csv | tail -n +2 | sed "s/$/,$run/" >> "$HEAT_OUT"
+    ./Cpp_implementation/Heat_diffusion_benchmark.exe sequential tests_configs.csv | tail -n +2 | sed "s/$/,$run/" >> "$HEAT_OUT"
 done
 
 echo -e "\n=== Running: C++ Heat Diffusion Parallel (OpenMP) ==="
