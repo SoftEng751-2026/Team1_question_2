@@ -82,11 +82,11 @@ void run_heat_diffusion_parallel(int rows, int cols, int iterations, int seed, i
 }
 
 /**
- * Heat Diffusion Stencil Computation (C++ Serial Version)
+ * Heat Diffusion Stencil Computation (C++ Sequential Version)
  * Same algorithm and cache optimizations, but no OpenMP.
  */
-void run_heat_diffusion_serial(int rows, int cols, int iterations, int seed, int threads) {
-    // We maintain tiling in the serial version to provide a fair baseline
+void run_heat_diffusion_sequential(int rows, int cols, int iterations, int seed, int threads) {
+    // We maintain tiling in the sequential version to provide a fair baseline
     // comparing only the effect of multi-threading, not the cache optimization itself.
     size_t size = (size_t)rows * cols;
     std::vector<double> current(size, 0.0);
@@ -122,7 +122,7 @@ void run_heat_diffusion_serial(int rows, int cols, int iterations, int seed, int
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-    std::cout << "HeatDiffusion_Cpp_Serial," << rows << "," << cols << "," 
+    std::cout << "HeatDiffusion_Cpp_Sequential," << rows << "," << cols << "," 
               << iterations << "," << seed << "," << threads << "," << duration << std::endl;
 }
 

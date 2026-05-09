@@ -95,7 +95,7 @@ public class Heat_diffusion_benchmark {
                           rows, cols, iterations, seed, threads, durationMs);
     }
 
-    public static void solveSerial(int rows, int cols, int iterations, int seed, int threads) {
+    public static void solveSequential(int rows, int cols, int iterations, int seed, int threads) {
         double[] current = new double[rows * cols];
         double[] next = new double[rows * cols];
         double alpha = 0.1;
@@ -105,7 +105,7 @@ public class Heat_diffusion_benchmark {
         long startTime = System.nanoTime();
 
         for (int t = 0; t < iterations; t++) {
-            // Serial version also uses 2D Tiling (Loop Blocking)
+            // Sequential version also uses 2D Tiling (Loop Blocking)
             // This ensures the comparison against Parallel versions is about
             // multi-threading speedup, not just different cache-access patterns.
             final int TILE_SIZE = 32;
@@ -139,7 +139,7 @@ public class Heat_diffusion_benchmark {
 
         long endTime = System.nanoTime();
         long durationMs = (endTime - startTime) / 1_000_000;
-        System.out.printf("HeatDiffusion_Java_Serial,%d,%d,%d,%d,%d,%d\n", 
+        System.out.printf("HeatDiffusion_Java_Sequential,%d,%d,%d,%d,%d,%d\n", 
                           rows, cols, iterations, seed, threads, durationMs);
     }
 

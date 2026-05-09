@@ -116,7 +116,7 @@ class Sequential_test {
         String csvPath = args.length > 0 ? args[0] : "tests_configs.csv";
         List<TestCase> testCases = readTestConfigs(csvPath);
         
-        System.out.println("implementation,rows,cols,iterations,seed,time_ms");
+        System.out.println("implementation,rows,cols,iterations,seed,threads,time_ms");
         
         for (TestCase tc : testCases) {
             
