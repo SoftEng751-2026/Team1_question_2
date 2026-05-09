@@ -127,16 +127,18 @@ void run_heat_diffusion_serial(int rows, int cols, int iterations, int seed, int
 }
 
 int main(int argc, char* argv[]) {
-    if (argc < 2) {
-        std::cerr << "Usage: " << argv[0] << " <config_csv>" << std::endl;
+    if (argc < 3) {
+        std::cerr << "Usage: " << argv[0] << " <mode> <config_csv>" << std::endl;
+        std::cerr << "  mode: serial | parallel" << std::endl;
         return 1;
     }
 
-    std::ifstream file(argv[1]);
+    std::string mode = argv[1];
+    std::ifstream file(argv[2]);
     if (!file.is_open()) return 1;
 
     std::string line;
-    // CSV Header for standard output
+    // CSV Header for standard output (stripped by tail -n +2 in shell script)
     std::cout << "implementation,rows,cols,iterations,seed,threads,time_ms" << std::endl;
 
     std::getline(file, line); // Skip config header
@@ -151,8 +153,11 @@ int main(int argc, char* argv[]) {
         }
 
         if (p.size() >= 5) {
-            run_heat_diffusion_serial(p[0], p[1], p[2], p[3], p[4]);
-            run_heat_diffusion_parallel(p[0], p[1], p[2], p[3], p[4]);
+            if (mode == "parallel") {
+                run_heat_diffusion_parallel(p[0], p[1], p[2], p[3], p[4]);
+            } else {
+                run_heat_diffusion_serial(p[0], p[1], p[2], p[3], p[4]);
+            }
         }
     }
 

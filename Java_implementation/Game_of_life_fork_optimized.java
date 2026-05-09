@@ -99,9 +99,11 @@ class Game_of_life_fork_optimized {
 
             ForkJoinPool pool = new ForkJoinPool(tc.threads);
 
-            // Warm-up run (not timed)
-            pool.invoke(new TileTask(current, next, tc.rows, tc.cols, stride, 0, tc.rows));
-            { int[] t = current; current = next; next = t; }
+            // Warm-up: 3 non-timed iterations for JIT compilation
+            for (int w = 0; w < 3; w++) {
+                pool.invoke(new TileTask(current, next, tc.rows, tc.cols, stride, 0, tc.rows));
+                int[] t = current; current = next; next = t;
+            }
 
             long start = System.nanoTime();
 

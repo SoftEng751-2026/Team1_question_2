@@ -119,9 +119,12 @@ class Sequential_test {
         System.out.println("implementation,rows,cols,iterations,seed,time_ms");
         
         for (TestCase tc : testCases) {
-           
+            
             int[][] grid = generateGrid(tc.rows, tc.cols, tc.seed);
-            findNextGen(grid);
+            // Warm-up: 3 non-timed iterations for JIT compilation
+            for (int w = 0; w < 3; w++) {
+                findNextGen(grid);
+            }
             long start = System.nanoTime();
             for (int i = 0; i < tc.iterations; i++) {
                 findNextGen(grid);
