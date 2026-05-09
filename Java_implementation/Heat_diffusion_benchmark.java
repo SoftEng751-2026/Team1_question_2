@@ -144,11 +144,16 @@ public class Heat_diffusion_benchmark {
     }
 
     public static void main(String[] args) {
-        if (args.length < 1) return;
+        if (args.length < 2) {
+            System.err.println("Usage: java Heat_diffusion_benchmark <mode> <config_csv>");
+            System.err.println("  mode: sequential | parallel");
+            return;
+        }
 
+        String mode = args[0];
         System.out.println("implementation,rows,cols,iterations,seed,threads,time_ms");
 
-        try (BufferedReader br = new BufferedReader(new FileReader(args[0]))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(args[1]))) {
             String line = br.readLine(); // Skip header
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
@@ -158,8 +163,11 @@ public class Heat_diffusion_benchmark {
                     int iters = Integer.parseInt(parts[2].trim());
                     int seed = Integer.parseInt(parts[3].trim());
                     int threads = Integer.parseInt(parts[4].trim());
-                    solveSequential(rows, cols, iters, seed, threads);
-                    solveParallel(rows, cols, iters, seed, threads);
+                    if ("parallel".equals(mode)) {
+                        solveParallel(rows, cols, iters, seed, threads);
+                    } else {
+                        solveSequential(rows, cols, iters, seed, threads);
+                    }
                 }
             }
         } catch (IOException e) {
