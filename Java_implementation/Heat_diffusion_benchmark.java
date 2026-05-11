@@ -34,25 +34,31 @@ public class Heat_diffusion_benchmark {
             // This prevents the overhead of task creation from exceeding the actual computation time.
             // Splitting primarily by rows ensures that each task works on a contiguous memory block.
             if ((endRow - startRow) < (rows / 32) || (endRow - startRow) * cols < THRESHOLD) {
-                for (int i = startRow; i < endRow; i++) {
-                    if (i <= 0 || i >= rows - 1) continue; // Boundary condition: fixed edges
+                int effectiveStart = Math.max(1, startRow);
+                int effectiveEnd = Math.min(rows - 1, endRow);
 
-                    // Memory Optimization: Pre-calculating row offsets to minimize
-                    // multiplications (i * cols) inside the innermost loop.
-                    int rowOffset = i * cols;
-                    int nextRow = (i + 1) * cols;
-                    int prevRow = (i - 1) * cols;
+                // Apply Tiling (Loop Blocking) even in the parallel leaf task 
+                // to maximize Cache reuse.
+                for (int ii = effectiveStart; ii < effectiveEnd; ii += TILE_SIZE) {
+                    int limitI = Math.min(ii + TILE_SIZE, effectiveEnd);
+                    for (int jj = 1; jj < cols - 1; jj += TILE_SIZE) {
+                        int limitJ = Math.min(jj + TILE_SIZE, cols - 1);
 
-                    for (int j = 1; j < cols - 1; j++) {
-                        int idx = rowOffset + j;
-                        // 5-point stencil operation: Efficiently uses pre-calculated row indices.
-                        dst[idx] = src[idx] + alpha * (
-                            src[nextRow + j] +
-                            src[prevRow + j] +
-                            src[idx + 1] +
-                            src[idx - 1] -
-                            4.0 * src[idx]
-                        );
+                        for (int i = ii; i < limitI; i++) {
+                            int rowOffset = i * cols;
+                            int nextRow = (i + 1) * cols;
+                            int prevRow = (i - 1) * cols;
+                            for (int j = jj; j < limitJ; j++) {
+                                int idx = rowOffset + j;
+                                dst[idx] = src[idx] + alpha * (
+                                    src[nextRow + j] +
+                                    src[prevRow + j] +
+                                    src[idx + 1] +
+                                    src[idx - 1] -
+                                    4.0 * src[idx]
+                                );
+                            }
+                        }
                     }
                 }
             } else {
