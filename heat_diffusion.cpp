@@ -20,6 +20,7 @@
 #include <iostream>
 #include <vector>
 #include <iomanip>
+#include <omp.h> // Required for Parallelism
 
 class HeatDiffusion {
 private:
@@ -34,17 +35,16 @@ public:
         grid2.resize(rows, std::vector<double>(cols, 0.0));
     }
 
-    // Initialize with a heat source in the center
     void initialize() {
         grid1[rows / 2][cols / 2] = 100.0;
     }
 
-    // Stencil computation step
     void step(bool useGrid1AsSource) {
         auto& src = useGrid1AsSource ? grid1 : grid2;
         auto& dst = useGrid1AsSource ? grid2 : grid1;
 
-        // Iterate over internal cells (excluding boundaries)
+        // Parallelize the outer loop. Static scheduling is best for balanced stencils.
+        #pragma omp parallel for schedule(static)
         for (int i = 1; i < rows - 1; ++i) {
             for (int j = 1; j < cols - 1; ++j) {
                 dst[i][j] = src[i][j] + alpha * (
@@ -68,14 +68,14 @@ public:
 };
 
 int main(int argc, char* argv[]) {
-    // Default values if no arguments are provided
-    int size = 10;
-    int steps = 5;
+    int size = 1000; // Defaulting to large size for parallel testing
+    int steps = 100;
     double alpha = 0.2;
 
-    // This part reads the numbers you type in the terminal
     if (argc >= 2) size = std::stoi(argv[1]);
     if (argc >= 3) steps = std::stoi(argv[2]);
+
+    double startTime = omp_get_wtime();
 
     HeatDiffusion solver(size, size, alpha);
     solver.initialize();
@@ -86,13 +86,14 @@ int main(int argc, char* argv[]) {
         currentIsGrid1 = !currentIsGrid1;
     }
 
-    // Only print the grid if it's small (to avoid flooding your terminal)
+    double endTime = omp_get_wtime();
+
     if (size <= 20) {
-        std::cout << "Final state after " << steps << " steps:" << std::endl;
         solver.printGrid(currentIsGrid1);
     } else {
-        std::cout << "Simulation complete for " << size << "x" << size 
-                  << " grid after " << steps << " steps." << std::endl;
+        std::cout << "C++ Parallel Simulation Complete." << std::endl;
+        std::cout << "Grid: " << size << "x" << size << " | Steps: " << steps << std::endl;
+        std::cout << "Execution Time: " << (endTime - startTime) << " seconds" << std::endl;
     }
 
     return 0;
