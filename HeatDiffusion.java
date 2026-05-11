@@ -18,12 +18,16 @@
  * correct grid based on this flag.
  */
 
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.RecursiveAction;
+
 public class HeatDiffusion {
     private final int rows;
     private final int cols;
     private final double alpha;
     private double[][] grid1;
     private double[][] grid2;
+    private final ForkJoinPool pool;
 
     public HeatDiffusion(int rows, int cols, double alpha) {
         this.rows = rows;
@@ -31,51 +35,61 @@ public class HeatDiffusion {
         this.alpha = alpha;
         this.grid1 = new double[rows][cols];
         this.grid2 = new double[rows][cols];
+        this.pool = new ForkJoinPool(); // Shared memory thread pool
     }
 
-    /**
-     * Set up an initial heat source in the middle of the grid.
-     */
     public void initialize() {
         grid1[rows / 2][cols / 2] = 100.0;
     }
 
-    /**
-     * Performs one iteration of the heat diffusion stencil.
-     * @param useGrid1AsSource toggle which buffer acts as input.
-     */
+    // Parallel Task Definition
+    private class StencilTask extends RecursiveAction {
+        private static final int THRESHOLD = 64; // Adjusted for cache-line efficiency
+        private final int startRow, endRow;
+        private final double[][] src, dst;
+
+        StencilTask(int startRow, int endRow, double[][] src, double[][] dst) {
+            this.startRow = startRow;
+            this.endRow = endRow;
+            this.src = src;
+            this.dst = dst;
+        }
+
+        @Override
+        protected void compute() {
+            if (endRow - startRow <= THRESHOLD) {
+                for (int i = startRow; i < endRow; i++) {
+                    for (int j = 1; j < cols - 1; j++) {
+                        dst[i][j] = src[i][j] + alpha * (
+                            src[i + 1][j] + src[i - 1][j] +
+                            src[i][j + 1] + src[i][j - 1] -
+                            4.0 * src[i][j]
+                        );
+                    }
+                }
+            } else {
+                int mid = (startRow + endRow) / 2;
+                invokeAll(new StencilTask(startRow, mid, src, dst),
+                          new StencilTask(mid, endRow, src, dst));
+            }
+        }
+    }
+
     public void step(boolean useGrid1AsSource) {
         double[][] src = useGrid1AsSource ? grid1 : grid2;
         double[][] dst = useGrid1AsSource ? grid2 : grid1;
-
-        for (int i = 1; i < rows - 1; i++) {
-            for (int j = 1; j < cols - 1; j++) {
-                dst[i][j] = src[i][j] + alpha * (
-                    src[i + 1][j] + src[i - 1][j] +
-                    src[i][j + 1] + src[i][j - 1] -
-                    4.0 * src[i][j]
-                );
-            }
-        }
-    }
-
-    public void printGrid(boolean fromGrid1) {
-        double[][] grid = fromGrid1 ? grid1 : grid2;
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                System.out.printf("%6.2f ", grid[i][j]);
-            }
-            System.out.println();
-        }
+        pool.invoke(new StencilTask(1, rows - 1, src, dst));
     }
 
     public static void main(String[] args) {
-        int size = 10;
-        int steps = 5;
+        int size = 1000;
+        int steps = 100;
         double alpha = 0.2;
 
         HeatDiffusion solver = new HeatDiffusion(size, size, alpha);
         solver.initialize();
+
+        long startTime = System.currentTimeMillis();
 
         boolean currentIsGrid1 = true;
         for (int t = 0; t < steps; t++) {
@@ -83,7 +97,10 @@ public class HeatDiffusion {
             currentIsGrid1 = !currentIsGrid1;
         }
 
-        System.out.println("Final state after " + steps + " steps:");
-        solver.printGrid(currentIsGrid1);
+        long endTime = System.currentTimeMillis();
+
+        System.out.println("Java Parallel Simulation Complete.");
+        System.out.println("Grid: " + size + "x" + size + " | Steps: " + steps);
+        System.out.println("Execution Time: " + (endTime - startTime) / 1000.0 + " seconds");
     }
 }
