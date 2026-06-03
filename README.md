@@ -21,8 +21,6 @@ dos2unix run_tests_heat_diffusion.sh
 ./run_tests_heat_diffusion.sh
 
 # If no python installed in your linux env go out and run
-python create_plot.py
-python create_plot_heat_diffusion.py
 python create_analysis_plots.py
 ```
 

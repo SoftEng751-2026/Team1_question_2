@@ -122,7 +122,7 @@ void run_heat_diffusion_sequential(int rows, int cols, int iterations, int seed,
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-    std::cout << "HeatDiffusion_Cpp_Sequential," << rows << "," << cols << "," 
+    std::cout << "HeatDiffusion_Cpp_Serial," << rows << "," << cols << "," 
               << iterations << "," << seed << "," << threads << "," << duration << std::endl;
 }
 

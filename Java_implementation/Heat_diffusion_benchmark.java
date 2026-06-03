@@ -145,7 +145,7 @@ public class Heat_diffusion_benchmark {
 
         long endTime = System.nanoTime();
         long durationMs = (endTime - startTime) / 1_000_000;
-        System.out.printf("HeatDiffusion_Java_Sequential,%d,%d,%d,%d,%d,%d\n", 
+        System.out.printf("HeatDiffusion_Java_Serial,%d,%d,%d,%d,%d,%d\n", 
                           rows, cols, iterations, seed, threads, durationMs);
     }
 

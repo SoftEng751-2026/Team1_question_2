@@ -44,7 +44,6 @@ rm -f Java_implementation/*.class
 rm -f Cpp_implementation/*.exe
 
 echo -e "\n=== Generating Heat Diffusion Performance Plots ==="
-python3 create_plot_heat_diffusion.py
 python3 create_analysis_plots.py
 
 
