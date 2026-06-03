@@ -46,7 +46,6 @@ rm -f Java_implementation/*.class
 rm -f Cpp_implementation/*.exe
 
 echo -e "\n=== Generating Performance Plots ==="
-python create_plot.py
 python create_analysis_plots.py
 
 echo -e "\n=== All results saved to $OUT ==="
