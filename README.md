@@ -74,7 +74,7 @@ Iterations scale inversely with grid area to keep total work comparable. Each co
 ./run_tests_heat_diffusion.sh
 ```
 
-### Run analysis plots only (from existing results)
+### Run analysis plots only
 ```bash
 python create_analysis_plots.py
 ```
@@ -95,27 +95,25 @@ docker run --rm -v $(pwd):/app stencil_benchmark    # WSL/Mac
 ├── run_tests_heat_diffusion.sh           # Heat Diffusion benchmark script
 ├── tests_configs.csv                     # Test parameter matrix
 ├── create_analysis_plots.py              # Speedup, efficiency, ratio, throughput plots
-├── create_plot.py                        # Raw time bar chart (GoL)
-├── create_plot_heat_diffusion.py         # Raw time bar chart (Heat)
 │
 ├── Cpp_implementation/
 │   ├── Cpp_fork_optimized.cpp            # GoL: OpenMP + cache-line padding
 │   ├── Cpp_sequential.cpp                # GoL: sequential (vector-of-vectors)
-│   ├── Heat_diffusion_benchmark.cpp      # Heat: serial + OpenMP (mode arg)
+│   ├── Heat_diffusion_benchmark.cpp      # Heat: serial + OpenMP
 │   └── heat_diffusion.cpp                # Standalone heat diffusion
 │
 ├── Java_implementation/
 │   ├── Game_of_life_fork_optimized.java  # GoL: ForkJoin + cache-line padding
-│   ├── Sequential_test.java              # GoL: sequential (in-place sentinel)
-│   ├── Heat_diffusion_benchmark.java     # Heat: serial + ForkJoin (mode arg)
+│   ├── Sequential_test.java              # GoL: sequential 
+│   ├── Heat_diffusion_benchmark.java     # Heat: serial + ForkJoin 
 │   ├── HeatDiffusion.java                # Standalone heat diffusion
-│   └── TestCase.java                     # Shared parameter POJO
+│   └── TestCase.java                     # Shared parameter 
 │
 ├── benchmark_results/
 │   ├── perf_raw/
 │   │   ├── all_results.csv               # GoL raw results (5 runs per config)
 │   │   └── heat_diffusion_results.csv    # Heat raw results (5 runs per config)
-│   └── benchmark_plots/                  # Generated plots (24+ PNGs)
+│   └── benchmark_plots/                  # Generated plots 
 │
 └── Dockerfile
 ```
